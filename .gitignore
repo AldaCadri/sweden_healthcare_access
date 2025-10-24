@@ -1,0 +1,21 @@
+# Virtual environment
+.venv/
+__pycache__/
+*.log
+*.tmp
+
+# Data files (raw and processed)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# dbt cache and compiled models
+dbt/target/
+dbt/dbt_packages/
+
+# VS Code
+.vscode/
+
+# Power BI files
+*.pbix
