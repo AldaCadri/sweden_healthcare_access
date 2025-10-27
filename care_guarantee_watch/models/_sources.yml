@@ -1,0 +1,18 @@
+version: 2
+sources:
+  - name: raw
+    database: HEALTH_RAW
+    schema: RAW
+    tables:
+      - name: KOLADA_RAW
+      - name: DATAEXPORT_RAW
+      - name: SCB_POPULATION_RAW
+      - name: OVERCROWDING_RAW
+      - name: BEDS_REGION_RAW
+      - name: BEDS_INTL_RAW
+      - name: MEDICAL_PERSONNEL_RAW
+      - name: NET_COST_RAW
+      - name: EXPENDITURE_GDP_RAW
+      - name: STAT_KON_ALDER_RAW
+      - name: STAT_DIAGNOS_RAW
+      - name: GEO_LAN_REGIONS_RAW
