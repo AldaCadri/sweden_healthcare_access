@@ -1,0 +1,28 @@
+
+name: care_guarantee_watch
+version: 1.0.0
+profile: care_guarantee_watch
+model-paths: ["models"]
+seed-paths: ["seeds"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+models:
+  care_guarantee_watch:
+    +materialized: view
+    stg:
+      +schema: STG
+      +materialized: view
+    ref:
+      +schema: REF
+      +materialized: table
+    mart:
+      +schema: MART
+      +materialized: table
+
+seeds:
+  care_guarantee_watch:
+    +schema: STG
+
+
+
