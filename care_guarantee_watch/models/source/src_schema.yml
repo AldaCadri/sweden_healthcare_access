@@ -1,8 +1,8 @@
 version: 2
 sources:
-  - name: raw
-    database: HEALTH_RAW
-    schema: RAW
+  - name: RAW_DATA
+    database: CARE_GUARANTEE_WATCH
+    schema: RAW_DATA
     tables:
       - name: KOLADA_RAW
       - name: DATAEXPORT_RAW
