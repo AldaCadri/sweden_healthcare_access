@@ -74,3 +74,5 @@ select
     else 'ALL'
   end as gender
 from cleaned
+where region_name is not null
+  

@@ -1,0 +1,186 @@
+version: 2
+
+
+
+# ---- STG models ----
+models:
+
+  - name: stg_kolada
+    description: "Kolada indicators unpivoted to long format (region-year-gender)."
+    columns:
+      - name: region_name
+        tests: [not_null]
+      - name: year
+        tests: [not_null]
+      - name: source_system
+      - name: source_indicator_code
+        tests: [not_null]
+      - name: indicator_name
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+      - name: gender
+        tests:
+          - accepted_values:
+              values: ['F','M','ALL']
+
+  - name: stg_dataexport
+    description: "Vården i siffror export (Regions only). Mixed granularity; yearly totals dropped when monthly exists."
+    columns:
+      - name: region_name
+        tests: [not_null]
+      - name: region_code
+      - name: year
+        tests: [not_null]
+      - name: period_month
+        description: "DATE for true months; NULL for yearly metrics."
+      - name: period_granularity
+      - name: period_filter_date
+      - name: period_filter_label
+      - name: source_system
+      - name: source_indicator_code
+        tests: [not_null]
+      - name: indicator_name
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+      - name: gender
+        tests:
+          - accepted_values:
+              values: ['F','M','ALL']
+      - name: unit
+      - name: numerator
+      - name: denominator
+    
+
+  - name: stg_population
+    description: "SCB population (PXWeb JSON) flattened to region-year. No gender/age in this extract."
+    columns:
+      - name: region_code
+        tests: [not_null]
+      - name: region_code_str
+      - name: year
+        tests: [not_null]
+      - name: population
+        tests:
+          - not_null
+      - name: gender
+        tests:
+          - accepted_values:
+              values: ['ALL']
+      - name: age_group
+
+  - name: stg_overcrowding
+    description: "Overcrowding & displaced patients; normalized periods & genders."
+    columns:
+      - name: region_name
+      - name: year
+        tests: [not_null]
+      - name: period_month
+      - name: period_granularity
+        tests:
+          - accepted_values:
+              values: ['YEAR','MONTH']
+      - name: indicator_name
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+      - name: gender
+        tests:
+          - accepted_values:
+              values: ['F','M','ALL']
+      - name: unit
+
+  - name: stg_beds_region
+    description: "Beds per region/year (often per 1000 inhabitants)."
+    columns:
+      - name: region_code
+      - name: region_name
+      - name: year
+        tests: [not_null]
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: stg_beds_intl
+    description: "Beds per country international (per 1000 inhabitants)."
+    columns:
+      - name: country_code
+      - name: country_name
+      - name: year
+        tests: [not_null]
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: stg_expenditure_gdp
+    description: "Health expenditure as % of GDP per year."
+    columns:
+      - name: year
+        tests: [not_null]
+      - name: source_indicator_code
+      - name: indicator_name
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+      - name: unit
+
+
+  - name: stg_tid_diagnos
+    description: "Care guarantee times per region/year/diagnosis."
+    columns:
+      - name: region_name
+        tests: [not_null]
+      - name: year
+        tests: [not_null]
+      - name: diagnosis_code
+      - name: diagnosis_name
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: stg_tid_konalder
+    description: "Care guarantee times per region/year/age group."
+    columns:
+      - name: region_name
+        tests: [not_null]
+      - name: year
+        tests: [not_null]
+      - name: age_group
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+  
+  - name: stg_medical_personnel
+    description: "Medical personnel per region/year (per 1000 inhabitants)."
+    columns:
+      - name: region_code
+      - name: region_name
+      - name: year
+        tests: [not_null]
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+  
+  - name: stg_net_cost
+    description: "Net cost per region/year (per inhabitant)."
+    columns:
+      - name: region_code
+      - name: region_name
+      - name: year
+        tests: [not_null]
+      - name: value
+        tests:
+          - not_null:
+              severity: warn
+
+
