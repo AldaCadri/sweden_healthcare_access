@@ -25,4 +25,7 @@ seeds:
     +schema: STG
 
 
-
+on-run-start:
+  - "create schema if not exists {{ target.database }}.STG"
+  - "create schema if not exists {{ target.database }}.REF"
+  - "create schema if not exists {{ target.database }}.MART"
