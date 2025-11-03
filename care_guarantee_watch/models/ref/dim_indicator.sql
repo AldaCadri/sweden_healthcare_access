@@ -50,6 +50,16 @@ with base as (
 
   /* ========== YEARLY SOURCES ========== */
 
+    union
+    select distinct
+        SOURCE_SYSTEM                               as source_system,
+        SOURCE_INDICATOR_CODE                       as source_indicator_code,
+        INDICATOR_NAME                              as indicator_name,
+        UNIT                                        as unit,
+        'YEAR'                                      as default_granularity
+    from {{ ref('stg_dataexport') }}
+    where PERIOD_GRANULARITY = 'YEAR'
+
   union
   -- STG_BEDS_REGION: NO SOURCE_SYSTEM column, and code is INDICATOR_CODE
   select distinct
@@ -59,6 +69,15 @@ with base as (
       cast(null as varchar)                   as unit,          
       'YEAR'                                  as default_granularity
   from {{ ref('stg_beds_region') }}
+
+  union
+  select distinct
+      SOURCE_SYSTEM,
+      SOURCE_INDICATOR_CODE,
+      INDICATOR_NAME,
+      UNIT,
+      'YEAR' as default_granularity
+  from {{ ref('stg_beds_intl') }}
 
   union
   -- STG_MEDICAL_PERSONNEL: has SOURCE_SYSTEM, SOURCE_INDICATOR_CODE, INDICATOR_NAME (unit may be absent)

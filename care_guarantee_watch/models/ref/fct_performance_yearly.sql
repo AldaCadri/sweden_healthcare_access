@@ -20,8 +20,8 @@ final as (
   left join {{ ref('dim_region') }}    r on r.region_code_int = s.region_code
   left join {{ ref('dim_gender') }}    g on g.gender_code    = s.gender
   left join {{ ref('dim_indicator') }} i
-    on i.source_system = s.source_system
-   and i.source_indicator_code = s.source_indicator_code
+  on upper(trim(i.source_system)) = upper(trim(s.source_system))
+ and upper(trim(i.source_indicator_code)) = upper(trim(s.source_indicator_code))
 )
 
 select * from final
