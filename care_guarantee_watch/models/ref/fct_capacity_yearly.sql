@@ -21,16 +21,17 @@ beds as (
 staff as (
   select
     r.region_key,
-    s.year::int                               as year,
-    'STAFF_HEADCOUNT'                         as metric_type,
-    s.source_system                           as src_system,
-    s.source_indicator_code                   as src_code,
-    s.value::float                            as value,
-    cast(null as varchar)                     as unit
+    s.year::int                   as year,
+    'STAFF_HEADCOUNT'             as metric_type,
+    s.source_system               as src_system,
+    s.source_indicator_code       as src_code,
+    sum(s.value)::float           as value,
+    cast(null as varchar)         as unit
   from {{ ref('stg_medical_personnel') }} s
   left join {{ ref('dim_region') }} r
-    -- prefer code if present; if your STG has only names, switch to name join:
     on r.region_name = s.region_name
+  where s.value is not null
+  group by r.region_key, s.year, s.source_system, s.source_indicator_code
 ),
 
 -- Population (region–year) — no source/code in STG → inject constants

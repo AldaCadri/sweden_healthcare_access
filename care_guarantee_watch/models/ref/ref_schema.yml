@@ -1,0 +1,343 @@
+version: 2
+
+models:
+
+  # ===================== DIMS =====================
+
+  - name: dim_region
+    description: "Swedish regions (län) with geo information (GeoJSON + GEOGRAPHY)."
+    tags: [ref, core_ref]
+    columns:
+      - name: region_key
+        description: "Surrogate key for region (generated from region_code_int)."
+        tests:
+          - not_null
+          - unique
+      - name: region_code_int
+        description: "SCB 2-digit region (län) code as integer."
+        tests:
+          - not_null
+          - unique
+      - name: region_name
+        description: "Official region (län) name."
+        tests:
+          - not_null
+
+  - name: dim_date
+    description: "Month-level date dimension used by all monthly facts."
+    tags: [ref, core_ref]
+    columns:
+      - name: date_key
+        description: "YYYYMMDD of the first day of the month."
+        tests:
+          - not_null
+          - unique
+      - name: month_date
+        description: "Date truncated to month."
+        tests:
+          - not_null
+      - name: year
+        description: "Calendar year."
+      - name: month_no
+        description: "Month number (1–12)."
+      - name: year_month_label
+        description: "Formatted month label (YYYY-MM)."
+
+  - name: dim_gender
+    description: "Gender dimension (F, M, ALL)."
+    tags: [ref, core_ref]
+    columns:
+      - name: gender_key
+        description: "Surrogate key for gender."
+        tests:
+          - not_null
+          - unique
+      - name: gender_code
+        description: "F, M, or ALL."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['F','M','ALL']
+
+  - name: dim_age_group
+    description: "Age group labels used in ED visits by gender/age."
+    tags: [ref, core_ref]
+    columns:
+      - name: age_key
+        description: "Surrogate key for age group."
+        tests:
+          - not_null
+          - unique
+      - name: age_group_label
+        description: "Display label (e.g., '0–17', '18–29', '80+')."
+        tests:
+          - not_null
+      - name: sort_key
+        description: "Numeric order for visualization."
+
+  - name: dim_indicator
+    description: "Unified indicator registry across VIS/Dataexport, Overcrowding, TID_* , Kolada, SCB Population, Beds, Costs, etc."
+    tags: [ref, core_ref]
+    columns:
+      - name: indicator_key
+        description: "Surrogate key md5(source_system, source_indicator_code)."
+        tests:
+          - not_null
+          - unique
+      - name: source_system
+        description: "System identifier (e.g., VIS, BEDS_REGION, SCB, KOLADA, REGFIN, BEDS_INTL)."
+        tests:
+          - not_null
+      - name: source_indicator_code
+        description: "Source-specific stable code for the metric."
+        tests:
+          - not_null
+      - name: indicator_name
+        description: "Human-readable indicator name."
+      - name: unit
+        description: "Unit if available (%, antal, SEK, per 1,000, etc.)."
+      - name: default_granularity
+        description: "MONTH or YEAR."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['MONTH','YEAR']
+      - name: topic
+        description: "Light taxonomy (WAITING_TIME, PRESSURE, CAPACITY, COST, QUALITY, UTILIZATION)."
+      - name: polarity
+        description: "POS (higher is better), NEG (higher is worse), or NEUTRAL."
+
+  # ===================== FACTS =====================
+
+  - name: fct_performance_monthly
+    description: "All monthly metrics from Vården i siffror (DATAEXPORT). Grain: region × month × indicator × (gender)."
+    tags: [ref, core_ref]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['region_key','date_key','indicator_key','gender_key']
+    columns:
+      - name: region_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_region')
+                field: region_key
+      - name: date_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: indicator_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: indicator_key
+      - name: gender_key
+        description: "Nullable for metrics without gender breakdown."
+        tests: []   # may be NULL for some indicators
+      - name: value
+        description: "Metric value (%/antal/SEK depending on indicator)."
+        tests:
+          - not_null
+
+  - name: fct_performance_yearly
+    description: "All yearly metrics from Vården i siffror (DATAEXPORT). Grain: region × year × indicator × (gender)."
+    tags: [ref, core_ref]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['region_key','year','indicator_key','gender_key']
+    columns:
+      - name: region_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_region')
+                field: region_key
+      - name: year
+        tests:
+          - not_null
+      - name: indicator_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: indicator_key
+      - name: gender_key
+        tests: []   # may be NULL
+      - name: value
+        tests:
+          - not_null
+
+  - name: fct_overcrowding_monthly
+    description: "Monthly ED overcrowding/pressure indicators. Grain: region × month × indicator."
+    tags: [ref, core_ref]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['region_key','date_key','indicator_key']
+    columns:
+      - name: region_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_region')
+                field: region_key
+      - name: date_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: indicator_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: indicator_key
+      - name: value
+        tests:
+          - not_null
+
+  - name: fct_visits_by_gender_age_m
+    description: "Monthly ED visits by gender and age group (TID_KONALDER). Grain: region × month × gender × age × indicator."
+    tags: [ref, core_ref]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['region_key','date_key','gender_key','age_key','indicator_key']
+    columns:
+      - name: region_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_region')
+                field: region_key
+      - name: date_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_key
+      - name: gender_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_gender')
+                field: gender_key
+      - name: age_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_age_group')
+                field: age_key
+      - name: indicator_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: indicator_key
+      - name: value
+        tests:
+          - not_null
+
+  - name: fct_capacity_yearly
+    description: "Yearly regional resources & costs (Beds, Staff, Population, Net Cost). Grain: region × year × metric_type × indicator."
+    tags: [ref, core_ref]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['region_key','year','metric_type','indicator_key']
+    columns:
+      - name: region_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_region')
+                field: region_key
+      - name: year
+        tests:
+          - not_null
+      - name: metric_type
+        description: "BEDS_PER_1000 | STAFF_HEADCOUNT | POPULATION | NET_COST_SEK"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['BEDS_PER_1000','STAFF_HEADCOUNT','POPULATION','NET_COST_SEK']
+      - name: indicator_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: indicator_key
+      - name: value
+        tests:
+          - not_null
+
+  - name: fct_kolada_y
+    description: "Yearly Kolada indicators by region and (optional) gender. Grain: region × year × indicator × (gender)."
+    tags: [ref, core_ref]
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns: ['region_key','year','gender_key','indicator_key']
+    columns:
+      - name: region_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_region')
+                field: region_key
+      - name: year
+        tests:
+          - not_null
+      - name: gender_key
+        tests: []   # may be NULL
+      - name: indicator_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: indicator_key
+      - name: value
+        tests:
+          - not_null
+
+  - name: fct_beds_intl_y
+    description: "International hospital beds per 1,000 population (country–year)."
+    tags: [ref, core_ref]
+    columns:
+      - name: country_name
+        description: "Country (national grain)."
+        tests:
+          - not_null
+      - name: year
+        tests:
+          - not_null
+      - name: indicator_key
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_indicator')
+                field: indicator_key
