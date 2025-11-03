@@ -4,6 +4,7 @@ with src as (
   select *
   from {{ ref('stg_dataexport') }}
   where period_granularity = 'MONTH'
+  and value is not null
 ),
 
 final as (
