@@ -21,8 +21,10 @@ models:
       +materialized: table
 
 seeds:
+  +quote_columns: false
   care_guarantee_watch:
-    +schema: STG
+    dim_indicator_taxonomy:
+      +schema: ref_seeds
 
 
 on-run-start:
