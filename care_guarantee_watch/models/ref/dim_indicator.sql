@@ -150,21 +150,11 @@ dedup as (
    Extend this VALUES block with real codes you encounter as you go. */
 map as (
   select
-    column1::varchar as source_system,
-    column2::varchar as source_indicator_code,
-    column3::varchar as topic,      -- e.g., WAITING_TIME, PRESSURE, CAPACITY, COST, QUALITY, UTILIZATION
-    column4::varchar as polarity    -- POS (higher=better) | NEG (higher=worse) | NEUTRAL
-  from values
-    -- Waiting-time examples (VIS = Vården i siffror)
-    ('VIS','E3_CONTACT','WAITING_TIME','POS'),
-    ('VIS','E90_FIRST_VISIT','WAITING_TIME','POS'),
-    ('VIS','E90_OPERATION','WAITING_TIME','POS'),
-    -- Pressure
-    ('VIS','ED_OVERCRWD','PRESSURE','NEG'),
-    -- Capacity / population / cost
-    ('BEDS_REGION','BEDS_PER_1000','CAPACITY','POS'),
-    ('SCB','POPULATION','CAPACITY','NEUTRAL'),
-    ('REGFIN','NET_COST','COST','NEG')  -- adjust if your NET_COST has a different source_system
+    upper(trim(source_system))       as source_system,
+    upper(trim(source_indicator_code)) as source_indicator_code,
+    topic,
+    polarity
+  from {{ ref('dim_indicator_taxonomy') }}
 ),
 
 final as (
@@ -179,8 +169,8 @@ final as (
     m.polarity
   from dedup d
   left join map m
-    on m.source_system = d.source_system
-   and m.source_indicator_code = d.source_indicator_code
+    on upper(trim(m.source_system)) = upper(trim(d.source_system))
+   and upper(trim(m.source_indicator_code)) = upper(trim(d.source_indicator_code))
 )
 
 select * from final
