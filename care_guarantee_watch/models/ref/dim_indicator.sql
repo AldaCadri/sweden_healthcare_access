@@ -146,8 +146,7 @@ dedup as (
   ) = 1
 ),
 
-/* Optional: light taxonomy so you can filter in marts / Power BI without hardcoding there.
-   Extend this VALUES block with real codes you encounter as you go. */
+
 map as (
   select
     upper(trim(source_system))       as source_system,
