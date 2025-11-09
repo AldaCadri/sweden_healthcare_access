@@ -17,3 +17,4 @@ sources:
       - name: STAT_DIAGNOS_RAW
       - name: GEO_LAN_REGIONS_RAW
       - name: PHYSICIANSPER1000_RAW
+      - name: HEALTH_EXPENDITURE_INTL_RAW

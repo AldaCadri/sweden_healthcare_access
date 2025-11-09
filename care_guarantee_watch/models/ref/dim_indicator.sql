@@ -129,6 +129,17 @@ select distinct
     'YEAR'                         as default_granularity
 from {{ ref('stg_physicians_per1000') }}
 
+
+union
+
+select distinct
+  'OECD_HEALTH'                   as source_system,
+  'HEALTH_EXPENDITURE_PCT_GDP'    as source_indicator_code,
+  'Health expenditure (% of GDP)' as indicator_name,
+  '% of GDP'                      as unit,
+  'YEAR'                          as default_granularity
+from {{ ref('stg_health_exp_gdp_intl') }}
+
   union
   -- STG_EXPENDITURE_GDP: has SOURCE_SYSTEM, SOURCE_INDICATOR_CODE, INDICATOR_NAME, UNIT
   select distinct
