@@ -119,6 +119,16 @@ with base as (
       'YEAR'                                  as default_granularity
   from {{ ref('stg_kolada') }}
 
+union
+-- STG_PHYSICIANSPER1000 (separate indicator registry)
+select distinct
+    'OECD_HEALTH'                  as source_system,
+    'PHYSICIANS_PER_1000'          as source_indicator_code,
+    'Doctors per 1000 inhabitants' as indicator_name,
+    'Per 1000 inhabitants'         as unit,
+    'YEAR'                         as default_granularity
+from {{ ref('stg_physicians_per1000') }}
+
   union
   -- STG_EXPENDITURE_GDP: has SOURCE_SYSTEM, SOURCE_INDICATOR_CODE, INDICATOR_NAME, UNIT
   select distinct

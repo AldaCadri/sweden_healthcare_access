@@ -16,3 +16,4 @@ sources:
       - name: STAT_KON_ALDER_RAW
       - name: STAT_DIAGNOS_RAW
       - name: GEO_LAN_REGIONS_RAW
+      - name: PHYSICIANSPER1000_RAW
