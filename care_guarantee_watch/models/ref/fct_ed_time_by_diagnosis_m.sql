@@ -15,6 +15,7 @@ select
   r.region_key,
   to_number(to_char(date_trunc('month', s.period_month),'YYYYMMDD')) as date_key,
   d.diagnosis_key,
+  s.diagnosgrupp,
   i.indicator_key,
   s.value::float as value,
   s.unit as unit
