@@ -4,6 +4,7 @@ with waits as (
   select
     f.region_key,
     f.year,
+    cast(year * 10000 + 101 as number(8,0)) as date_key,
     f.gender_key,
     f.indicator_key,
     d.source_system,
