@@ -8,23 +8,23 @@ WITH src AS (
 -- 1) Parse Swedish month + year from Category
 parsed AS (
   SELECT
-    TRIM("Category") AS category,
+    TRIM("CATEGORY") AS category,
     CASE
-      WHEN LOWER("Category") LIKE 'januari %'   THEN 1
-      WHEN LOWER("Category") LIKE 'februari %'  THEN 2
-      WHEN LOWER("Category") LIKE 'mars %'      THEN 3
-      WHEN LOWER("Category") LIKE 'april %'     THEN 4
-      WHEN LOWER("Category") LIKE 'maj %'       THEN 5
-      WHEN LOWER("Category") LIKE 'juni %'      THEN 6
-      WHEN LOWER("Category") LIKE 'juli %'      THEN 7
-      WHEN LOWER("Category") LIKE 'augusti %'   THEN 8
-      WHEN LOWER("Category") LIKE 'september %' THEN 9
-      WHEN LOWER("Category") LIKE 'oktober %'   THEN 10
-      WHEN LOWER("Category") LIKE 'november %'  THEN 11
-      WHEN LOWER("Category") LIKE 'december %'  THEN 12
+      WHEN LOWER("CATEGORY") LIKE 'januari %'   THEN 1
+      WHEN LOWER("CATEGORY") LIKE 'februari %'  THEN 2
+      WHEN LOWER("CATEGORY") LIKE 'mars %'      THEN 3
+      WHEN LOWER("CATEGORY") LIKE 'april %'     THEN 4
+      WHEN LOWER("CATEGORY") LIKE 'maj %'       THEN 5
+      WHEN LOWER("CATEGORY") LIKE 'juni %'      THEN 6
+      WHEN LOWER("CATEGORY") LIKE 'juli %'      THEN 7
+      WHEN LOWER("CATEGORY") LIKE 'augusti %'   THEN 8
+      WHEN LOWER("CATEGORY") LIKE 'september %' THEN 9
+      WHEN LOWER("CATEGORY") LIKE 'oktober %'   THEN 10
+      WHEN LOWER("CATEGORY") LIKE 'november %'  THEN 11
+      WHEN LOWER("CATEGORY") LIKE 'december %'  THEN 12
       ELSE NULL
     END AS month_no,
-    TRY_TO_NUMBER(REGEXP_SUBSTR("Category", '[0-9]{4}')) AS year,
+    TRY_TO_NUMBER(REGEXP_SUBSTR("CATEGORY", '[0-9]{4}')) AS year,
 
     /* list ONLY the region columns you need; don't use * to avoid duplicates */
     "Region Blekinge",

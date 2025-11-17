@@ -2,11 +2,11 @@
 
 with src as (
   select
-      trim(reference_area)                       as country_name,
-      try_to_number(time_period)                      as year,
+      trim(REFERENCE_AREA)                       as country_name,
+      try_to_number(TIME_PERIOD)                      as year,
       -- convert "7,3" -> 7.3 and cast
-      try_to_decimal(replace(value, ',', '.'), 10, 2) as value,
-      unit_of_measure               as unit
+      try_to_decimal(replace(OBS_VALUE, ',', '.'), 10, 2) as value,
+      UNIT_OF_MEASURE               as unit
   from {{ source('RAW_DATA','HEALTH_EXPENDITURE_INTL_RAW') }}
   where country_name is not null
     and year is not null

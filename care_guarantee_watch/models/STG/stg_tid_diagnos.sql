@@ -8,7 +8,7 @@ WITH src AS (
     "Value"       AS value_raw,
     "Region"      AS region_raw,
     "Diagnosgrupp" AS diagnosgrupp_raw,
-    "Period"      AS period_raw                          -- ISO 'YYYY-MM-DD'
+    "PERIOD"      AS period_raw                          -- ISO 'YYYY-MM-DD'
   FROM {{ source('RAW_DATA','STAT_DIAGNOS_RAW') }}
 ),
 

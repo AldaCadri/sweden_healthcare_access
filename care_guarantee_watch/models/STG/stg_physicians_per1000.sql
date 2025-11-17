@@ -1,10 +1,11 @@
 {{ config(materialized='view') }}
 
 
-    select
-        region_name,
-        to_number(year) as year,
-        value::float as value,
+    select 
+        
+        REGION_NAME as region_name,
+        to_number(YEAR) as year,
+        VALUE::float as value,
         'OECD_HEALTH' as source_system,
         'Doctors per 1000 inhabitants' as indicator_name,
         'Per 1000 inhabitants' as unit

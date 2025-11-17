@@ -9,7 +9,7 @@ WITH src AS (
     "Region/landsting/akutmottagning"   AS region_raw,
     "Kön"                               AS gender_raw,
     "Ålder"                             AS age_raw,
-    "Period"                            AS period_raw
+    "PERIOD"                            AS period_raw
   FROM {{ source('RAW_DATA','STAT_KON_ALDER_RAW') }}
 ),
 

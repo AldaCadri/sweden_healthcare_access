@@ -5,9 +5,9 @@ with prepared as (
   select
     "Område"                as region_name_raw,
     "Kön"                   as gender_raw,
-    "Nyckeltalsid"          as indicator_code,
-    "Nyckeltal"             as indicator_name,
-    "Nyckeltalsbeskrivning" as indicator_description,
+    "NYCKELTALSID"          as indicator_code,
+    "NYCKELTAL"             as indicator_name,
+    "NYCKELTALSBESKRIVNING" as indicator_description,
     cast("2019" as float) as y2019,
     cast("2020" as float) as y2020,
     cast("2021" as float) as y2021,

@@ -2,20 +2,20 @@
 
 WITH base AS (
   SELECT
-    "Enhetsnamn"         AS unit_name,
-    "Enhetstyp"          AS unit_type,
-    "Regionskod"         AS region_code,
-    "Enhetskod"          AS unit_code,
+    "ENHETSNAMN"         AS unit_name,
+    "ENHETSTYP"          AS unit_type,
+    "REGIONSKOD"         AS region_code,
+    "ENHETSKOD"          AS unit_code,
     "Kön/Totalt"         AS gender_raw,
     "Indikator-Id"       AS indicator_code,
-    "Titel"              AS indicator_name,
+    "TITEL"              AS indicator_name,
     "Måttenhet"          AS unit_raw,
     TRIM("Mätperiod")    AS period_raw,
     "Värde"              AS value_raw,
     "Täljare"            AS numerator_raw,
     "Nämnare/antal fall" AS denominator_raw
   FROM {{ source('RAW_DATA','DATAEXPORT_RAW') }}
-  WHERE "Enhetstyp" = 'Region'        -- only Regions
+  WHERE "ENHETSTYP" = 'Region'        -- only Regions
 ),
 
 period_parsed AS (
@@ -69,7 +69,7 @@ aug AS (
 
 SELECT
   TRIM(unit_name)                         AS region_name,
-  region_code,
+  TO_NUMBER (region_code)                     AS region_code,
   unit_code,
   year,
   period_month,                           -- NULL for YEAR rows (no fake months)

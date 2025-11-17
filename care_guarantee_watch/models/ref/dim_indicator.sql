@@ -1,7 +1,5 @@
 {{ config(materialized='table') }}
 
--- Build a unified registry of indicators across all STG sources,
--- using the *actual* column names found in your CSVs.
 
 with base as (
 
