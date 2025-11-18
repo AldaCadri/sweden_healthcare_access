@@ -1,13 +1,13 @@
 -- models/STG/stg_population.sql
 {{ config(materialized='view') }}
 
--- 0) Point to your RAW JSON
+-- 0) Point to RAW JSON
 WITH raw_doc AS (
   SELECT PAYLOAD AS j
-  FROM RAW_DATA.SCB_POPULATION_RAW       -- <-- change if needed
+  FROM RAW_DATA.SCB_POPULATION_RAW       
 ),
 
--- 1) Find the index of Region and Year in columns[] (robust even if order changes)
+-- 1) Find the index of Region and Year in columns[] 
 col_idx AS (
   SELECT
     MAX(IFF(c.value:code::string ILIKE 'Region', c.index, NULL)) AS idx_region,
@@ -40,7 +40,7 @@ normalized AS (
     year_raw::NUMBER                                      AS year,
     TRY_TO_NUMBER(obs_raw)                                AS population,
 
-    -- These don’t exist in this extract; keep consistent schema
+    
     'ALL'                                                 AS gender,
     CAST(NULL AS VARCHAR)                                 AS age_group
   FROM projected
