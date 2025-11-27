@@ -21,10 +21,6 @@ The project focuses on waiting times, overcrowding, capacity, fairness, and inte
 sweden_healthcare_access/
 │
 ├── care_guarantee_watch/        # Full dbt project (models, sources, tests)
-│   ├── models/                  # RAW → STG → REF → MART layers
-│   ├── seeds/                   # Static CSVs (if used)
-│   ├── snapshots/               # Optional history tracking
-│   └── dbt_project.yml
 │
 ├── src/                         # Supporting Python or ETL scripts
 │
@@ -45,7 +41,6 @@ All datasets come from official open data platforms:
 - **Statistics Sweden (SCB)** – population & demographics  
 - **OECD Health Data** – beds & international metrics  
 - **Socialstyrelsen / Government data** – medical personnel & capacity  
-- **Swedish region GeoJSON** – mapping geometries  
 - Additional CSV/Excel files used in staging
 
 ---
