@@ -17,7 +17,7 @@ The project focuses on waiting times, overcrowding, capacity, fairness, and inte
 ---
 
 ## Repository Structure
-
+```
 sweden_healthcare_access/
 │
 ├── care_guarantee_watch/        # Full dbt project (models, sources, tests)
@@ -33,6 +33,7 @@ sweden_healthcare_access/
 ├── requirements.txt             # Python library dependencies
 │
 └── README.md                    # Project documentation
+```
 ---
 
 ## Data Sources
