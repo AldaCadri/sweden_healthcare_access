@@ -20,20 +20,19 @@ The project focuses on waiting times, overcrowding, capacity, fairness, and inte
 
 sweden_healthcare_access/
 │
-├── care_guarantee_watch/ # Full dbt project with models, sources, tests
-│ ├── models/ # RAW → STG → REF → MART layers
-│ ├── seeds/ # Static CSV inputs (if any)
-│ ├── snapshots/ # Historical tracking (optional)
-│ └── dbt_project.yml
+├── care_guarantee_watch/        # Full dbt project (models, sources, tests)
+│   ├── models/                  # RAW → STG → REF → MART layers
+│   ├── seeds/                   # Static CSVs (if used)
+│   ├── snapshots/               # Optional history tracking
+│   └── dbt_project.yml
 │
-├── src/ # Supporting Python or ETL helper scripts
+├── src/                         # Supporting Python or ETL scripts
 │
-├── WH, DB creation and grants.sql
-│ # Snowflake warehouse + roles + RBAC setup
+├── WH, DB creation and grants.sql   # Snowflake warehouse + roles + RBAC
 │
-├── requirements.txt # Python dependencies
+├── requirements.txt             # Python library dependencies
 │
-└── README.md # Project documentation
+└── README.md                    # Project documentation
 ---
 
 ## Data Sources
@@ -65,7 +64,7 @@ All datasets come from official open data platforms:
 
 ---
 
-## 📊 Dashboard Content
+## Dashboard Content
 The Power BI dashboard contains:
 
 - Overview Snapshot 
@@ -73,4 +72,4 @@ The Power BI dashboard contains:
 - Pressure & Capacity
 - Costs & International Comparison
 
-
+Link to dashboard: https://app.powerbi.com/reportEmbed?reportId=a5684bb9-f772-41fe-80f5-651ff6f749b9&autoAuth=true&ctid=07f5b35b-52fc-4f27-9e84-81da79ab468d
