@@ -1,4 +1,4 @@
-# Care Guarantee Watch — Swedish Healthcare Access Project
+# Care Guarantee Watch - Swedish Healthcare Access Project
 
 ![Snowflake](https://img.shields.io/badge/Snowflake-Data%20Warehouse-blue)
 ![dbt](https://img.shields.io/badge/dbt-Core-orange)
