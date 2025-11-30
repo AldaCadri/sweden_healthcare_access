@@ -26,7 +26,7 @@ parsed AS (
     END AS month_no,
     TRY_TO_NUMBER(REGEXP_SUBSTR("CATEGORY", '[0-9]{4}')) AS year,
 
-    /* list ONLY the region columns you need; don't use * to avoid duplicates */
+    /* list only the region columns needed
     "Region Blekinge",
     "Region Dalarna",
     "Region Gotland",
@@ -130,7 +130,7 @@ cleaned AS (
              '\\s+län$', ''
            )
     END AS region_name,
-    CAST(value AS FLOAT) AS value      -- ✅ numeric → float, no TRY_*
+    CAST(value AS FLOAT) AS value      
   FROM u
 )
 

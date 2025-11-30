@@ -1,6 +1,5 @@
 {{ config(materialized='view') }}
 
--- 1️ Pull the core fact
 with f as (
     select
         f.region_key,
@@ -11,7 +10,6 @@ with f as (
     from {{ ref('fct_physicians_per_1000_y') }} f
 ),
 
--- 2️ Join lookup dims for descriptive columns
 joined as (
     select
         f.region_key,

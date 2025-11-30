@@ -1,7 +1,7 @@
 {{ config( materialized = 'view') }}
 
 -- This view converts the region geometries into GeoJSON text
--- for export to Power BI (Shape Map TopoJSON workflow)
+-- for export to Power BI 
 
 select
     region_key,

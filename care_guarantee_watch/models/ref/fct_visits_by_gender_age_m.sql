@@ -26,7 +26,7 @@ src_norm as (
   from src
 ),
 
--- Inline mapping for the problem you reported
+
 name_map as (
   select column1::string as bad_name_u, column2::string as good_name_u
   from values

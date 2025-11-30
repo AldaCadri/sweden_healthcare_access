@@ -11,7 +11,7 @@ final as (
   select
     r.region_key,
     to_number(to_char(date_trunc('month', s.period_month),'YYYYMMDD')) as date_key,
-    g.gender_key,                              -- may be null if STG has NULL gender
+    g.gender_key,                              
     i.indicator_key,
     s.value::float       as value,
     s.numerator::float   as numerator,

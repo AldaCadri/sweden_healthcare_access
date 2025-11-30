@@ -72,7 +72,7 @@ SELECT
   TO_NUMBER (region_code)                     AS region_code,
   unit_code,
   year,
-  period_month,                           -- NULL for YEAR rows (no fake months)
+  period_month,                           -- NULL for YEAR rows 
   period_granularity,                     -- 'MONTH' or 'YEAR'
   period_filter_date,                     -- month if monthly, else year-start
   period_filter_label,                    -- 'YYYY-MM' or 'YYYY'

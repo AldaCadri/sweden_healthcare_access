@@ -42,7 +42,7 @@ overc as (
   where lower(d.source_indicator_code) like '%displaced%'
 ),
 
--- 2) Median time to doctor (minutes) by age x gender (detail)
+-- 2) Median time to doctor (minutes) by age x gender 
 doctime_detail as (
   select
     f.region_key,
@@ -53,8 +53,8 @@ doctime_detail as (
     d.unit,
     'MINUTES'::varchar as metric_kind,
     'MONTHLY'::varchar as grain,
-    f.gender_key,               -- varchar
-    f.age_key,                  -- varchar
+    f.gender_key,               
+    f.age_key,                  
     null::varchar  as diagnosis_group,
     f.value::float as value
   from {{ ref('fct_visits_by_gender_age_m') }} f
@@ -62,7 +62,7 @@ doctime_detail as (
   where lower(d.source_indicator_code) like '%median_tid_till_läkare%'
 ),
 
--- 3) Doctor visits (count) by age x gender (detail)
+-- 3) Doctor visits (count) by age x gender 
 visits_detail as (
   select
     f.region_key,
@@ -82,7 +82,7 @@ visits_detail as (
   where regexp_like(lower(d.source_indicator_code||' '||d.indicator_name), 'antal.*bes(ö|o)k|bes_k')
 ),
 
--- 4) Median time to doctor by diagnosis (minutes) (detail)
+-- 4) Median time to doctor by diagnosis (minutes)
 doctime_diag as (
   select
     f.region_key,
@@ -95,7 +95,6 @@ doctime_diag as (
     'MONTHLY'::varchar  as grain,
     null::varchar       as gender_key,
     null::varchar       as age_key,
-    -- NOTE: use the real column name: diagnosgrupp OR diagnosis_group
     f.diagnosgrupp::varchar as diagnosis_group,
     f.value::float  as value
   from {{ ref('fct_ed_time_by_diagnosis_m') }} f

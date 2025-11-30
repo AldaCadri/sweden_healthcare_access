@@ -10,7 +10,7 @@ final as (
   select
     r.region_key,
     s.year::int          as year,
-    g.gender_key,        -- may be null
+    g.gender_key,        
     i.indicator_key,
     s.value::float       as value,
     s.numerator::float   as numerator,

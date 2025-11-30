@@ -7,20 +7,17 @@ WITH src AS (
 
 filtered AS (
   SELECT
-    TRIM("Enhetsnamn")          AS region_name,            -- text
-    /* If Regionskod is VARCHAR, keep TRY_TO_NUMBER; if it's NUMBER already, use CAST or keep as-is */
-    TRY_TO_NUMBER("Regionskod") AS region_code,            -- safe if text; OK if numeric too
-    TRIM("Enhetstyp")           AS unit_type,              -- expect 'Region'
+    TRIM("Enhetsnamn")          AS region_name,            
+    TRY_TO_NUMBER("Regionskod") AS region_code,            
+    TRIM("Enhetstyp")           AS unit_type,              
     TRIM("Kön/Totalt")          AS gender_raw,
     TRIM("Ålder")               AS age_raw,
 
-    /* 🔧 Don't TRY_ on numeric: Mätperiod is NUMBER in your preview */
-    "Mätperiod"::INT            AS year,                   -- was TRY_TO_NUMBER("Mätperiod")
+    "Mätperiod"::INT            AS year,                   
 
     TRIM("Måttenhet")           AS unit_raw,
 
-    /* 🔧 Värde is NUMBER already; just cast (or even leave it) */
-    "Värde"::FLOAT              AS value,                  -- was TRY or text handling
+    "Värde"::FLOAT              AS value,                  
 
     COALESCE(NULLIF(TRIM("Titel"),''), TRIM("Diagramrubrik")) AS indicator_name_raw,
     TRIM("Register/källa")      AS register_kalla

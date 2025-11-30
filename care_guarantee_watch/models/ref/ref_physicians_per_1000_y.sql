@@ -1,6 +1,6 @@
 {{ config(materialized='view') }}
 
--- From your STG (your code already emits system/code/name/unit)
+
 with s as (
   select
       region_name,
@@ -31,7 +31,6 @@ mapped as (
    where r.region_key is not null
 ),
 
--- optional: join indicator key (if not in dim yet, this will be null—FCT step will guard against it)
 with_indicator as (
   select
       m.region_key,

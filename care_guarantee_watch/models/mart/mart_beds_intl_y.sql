@@ -1,6 +1,6 @@
 {{ config(materialized='view') }}
 
--- Normalize keys from fact (supports either date_key or year)
+-- Normalize keys from fact
 with f as (
   select
       country_name,

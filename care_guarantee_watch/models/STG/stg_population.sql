@@ -7,7 +7,7 @@ WITH raw_doc AS (
   FROM RAW_DATA.SCB_POPULATION_RAW       
 ),
 
--- 1) Find the index of Region and Year in columns[] 
+-- 1) Find the index of Region and Year in columns
 col_idx AS (
   SELECT
     MAX(IFF(c.value:code::string ILIKE 'Region', c.index, NULL)) AS idx_region,
@@ -27,16 +27,16 @@ data_rows AS (
 
 projected AS (
   SELECT
-    key_arr[i.idx_region]::string         AS region_code_raw,   -- e.g., "01","03",...
-    key_arr[i.idx_year]::string           AS year_raw,          -- e.g., "2024"
+    key_arr[i.idx_region]::string         AS region_code_raw,   
+    key_arr[i.idx_year]::string           AS year_raw,          
     obs_raw
   FROM data_rows, col_idx i
 ),
 
 normalized AS (
   SELECT
-    TRY_TO_NUMBER(region_code_raw)                        AS region_code,         -- 1,3,4,...
-    LPAD(region_code_raw, 2, '0')                         AS region_code_str,     -- "01","03",...
+    TRY_TO_NUMBER(region_code_raw)                        AS region_code,         
+    LPAD(region_code_raw, 2, '0')                         AS region_code_str,    
     year_raw::NUMBER                                      AS year,
     TRY_TO_NUMBER(obs_raw)                                AS population,
 

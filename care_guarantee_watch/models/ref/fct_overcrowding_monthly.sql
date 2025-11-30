@@ -5,7 +5,7 @@ with src as (
   from {{ ref('stg_overcrowding') }}
 ),
 
--- explicit alias mappings (extend as you find more)
+-- explicit alias mappings 
 name_map as (
   select column1::varchar as bad_name, column2::varchar as good_name
   from values

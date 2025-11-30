@@ -1,7 +1,7 @@
 {{ config(materialized='view') }}
 
 with
--- Only the columns we need from the indicator dim
+-- Only the columns needed from the indicator dim
 dim_i as (
   select
     indicator_key,
@@ -87,7 +87,7 @@ m_pressure_doctime as (
     avg(f.value)                       as value
   from {{ ref('fct_visits_by_gender_age_m') }} f
   join dim_i d on d.indicator_key = f.indicator_key
-  where d.topic = 'PRESSURE'          -- relies on your taxonomy for "median tid till läkare"
+  where d.topic = 'PRESSURE'          
   group by 1,2,3,4,5,6,7,8
 ),
 

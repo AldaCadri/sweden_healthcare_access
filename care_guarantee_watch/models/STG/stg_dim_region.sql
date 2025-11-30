@@ -16,10 +16,10 @@ select
     try_to_number(props:"scb_lan_code_2"::string)        as region_code_int,
     lpad(props:"scb_lan_code_2"::string, 2, '0')         as region_code_2,
 
-    -- keep original (genitive) as reference
+    -- keep original as reference
     trim(props:"region_name_official"::string)           as region_name_raw,
 
-    -- cleaned display name: drop ONE trailing "s" (no county’s base name ends with "s")
+    -- cleaned name: drop ONE trailing "s"
     regexp_replace(trim(props:"region_name_official"::string), 's$', '') as region_name,
 
     to_geography(geom)                                   as geom

@@ -17,7 +17,7 @@ with roles as (
       when upper(i.topic) = 'CAPACITY'
         and regexp_like(lower(i.indicator_name), '(vårdplatser|beds)') then 'BEDS_PER_1000'
 
-      -- 👇 Staff headcount (split by profession)
+      -- Staff headcount (split by profession)
       when src = 'MEDICAL_PERSONNEL'
         and regexp_like(lower(i.indicator_name), '(läkare)') then 'STAFF_DOCTORS'
       when src = 'MEDICAL_PERSONNEL'
@@ -27,7 +27,6 @@ with roles as (
       when upper(i.topic) = 'CAPACITY'
         and regexp_like(lower(i.indicator_name), '(sjuksköterska|sjukskoterska|röntgensjuksköterska|rontgensjukskoterska)') then 'STAFF_NURSES'
 
-      -- (Optional) catch-all for other staff lines you might want later
       when src = 'MEDICAL_PERSONNEL' or upper(i.topic) = 'CAPACITY' then 'STAFF_OTHER'
 
       -- Cost
@@ -58,7 +57,7 @@ cap as (
   where r.role is not null
 ),
 
--- 3) Ambulance yearly (if stored in performance_yearly)
+-- 3) Ambulance yearly
 amb_year as (
   select
     f.region_key,
@@ -91,14 +90,14 @@ all_year as (
   select * from overc_year
 ),
 
--- 6) Aggregate by region/year + now separate doctors vs nurses
+-- 6) Aggregate by region/year +  separate doctors vs nurses
 agg as (
   select
     region_key,
     year,
     max(case when role = 'BEDS_PER_1000'      then value end) as beds_per_1000,
 
-    -- 👇 separate counts
+    
     sum(case when role = 'STAFF_DOCTORS'      then value end) as staff_doctors,
     sum(case when role = 'STAFF_NURSES'       then value end) as staff_nurses,
     sum(case when role in ('STAFF_DOCTORS','STAFF_NURSES') then value end) as staff_headcount_total,
@@ -120,7 +119,6 @@ final as (
     cast(year * 10000 + 101 as number(8,0)) as date_key,
     beds_per_1000,
 
-    -- 👇 exposed separately + total
     staff_doctors,
     staff_nurses,
     staff_headcount_total,

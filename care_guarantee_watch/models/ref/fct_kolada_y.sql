@@ -13,7 +13,7 @@ with src as (
   where value is not null
 ),
 
--- 2) Normalize incoming names (strip "Region " prefix and " län" suffix, uppercase)
+-- 2) Normalize incoming names 
 src_norm as (
   select
     upper(regexp_replace(regexp_replace(region_name_raw, '^\\s*REGION\\s+', ''), '\\s+LÄN\\s*$', '')) as name_norm,
@@ -41,7 +41,7 @@ name_map as (
     ('HALLANDS LÄN',          'HALLAND'),
     ('VÄSTRA GÖTALANDS LÄN',  'VÄSTRA GÖTALAND'),
     ('VÄRMLANDS LÄN',         'VÄRMLAND'),
-    ('ÖREBRO LÄN',            'ÖREBRO'),            -- 👈 added per your note
+    ('ÖREBRO LÄN',            'ÖREBRO'),           
     ('VÄSTMANLANDS LÄN',      'VÄSTMANLAND'),
     ('DALARNAS LÄN',          'DALARNA'),
     ('GÄVLEBORGS LÄN',        'GÄVLEBORG'),

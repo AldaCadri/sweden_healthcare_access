@@ -34,9 +34,9 @@ cleaned as (
   select
     region_name_raw,
 
-    /* 1) remove leading 'Region' or 'Regionen' (case-insensitive via parameters='i')
+    /* 1) remove leading 'Region' or 'Regionen'
        2) trim spaces
-       3) remove one trailing 's' (genitive) */
+       3) remove one trailing 's' */
     case
       when region_name_raw ilike 'Alla regioner%' then null
       else
@@ -44,7 +44,7 @@ cleaned as (
           regexp_replace(                                   -- steps 1 & 2
             trim(region_name_raw),
             '^(region(en)?[[:space:]]+)',                   -- pattern
-            '', 1, 1, 'i'                                   -- parameters='i' => case-insensitive
+            '', 1, 1, 'i'                                   
           ),
           's$',''                                           -- drop a single trailing s
         )

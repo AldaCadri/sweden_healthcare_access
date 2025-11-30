@@ -4,7 +4,6 @@ with src as (
   select
       trim(REFERENCE_AREA)                       as country_name,
       try_to_number(TIME_PERIOD)                      as year,
-      -- convert "7,3" -> 7.3 and cast
       try_to_decimal(replace(OBS_VALUE, ',', '.'), 10, 2) as value,
       UNIT_OF_MEASURE               as unit
   from {{ source('RAW_DATA','HEALTH_EXPENDITURE_INTL_RAW') }}
