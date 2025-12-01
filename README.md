@@ -5,7 +5,7 @@
 ![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-yellow)
 ![Python](https://img.shields.io/badge/Python-Scripts-green)
 
-This project analyzes how Sweden’s 21 regions perform against the **0–3–90–90 Vårdgaranti** (Care Guarantee).  
+This project analyzes how Sweden’s 21 regions perform against the **0-3-90-90 Vårdgaranti** (Care Guarantee).  
 It includes a full Snowflake + dbt data warehouse, data transformation pipeline, and a multi-tab Power BI dashboard.
 
 ---
